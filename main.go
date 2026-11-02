@@ -1,4 +1,4 @@
-// EXIF Renamer — 根据文件修改时间批量重命名媒体文件
+// EXIF Renamer — 根据文件修改时间批量重命名任意文件
 // 支持拖拽文件/文件夹，自动递归处理子目录
 package main
 
@@ -6,7 +6,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -20,7 +19,7 @@ func main() {
 	for {
 		clearScreen()
 		fmt.Println("\033[36m+------------------------------------------+\033[0m")
-		fmt.Println("\033[36m|            媒体文件自动重命名工具        |\033[0m")
+		fmt.Println("\033[36m|            文件自动重命名工具            |\033[0m")
 		fmt.Println("\033[36m+------------------------------------------+\033[0m")
 		fmt.Println("请拖入【单个/多个 文件/文件夹】并按回车:")
 		fmt.Print("\033[32m>> \033[0m")
@@ -35,7 +34,7 @@ func main() {
 			continue
 		}
 
-		paths := splitWindowsPaths(input)
+		paths := parseDragPaths(input)
 		if len(paths) > 0 {
 			runTask(paths)
 		} else {
@@ -48,7 +47,5 @@ func main() {
 }
 
 func clearScreen() {
-	cmd := exec.Command("cmd", "/c", "cls")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+	fmt.Print("\033[H\033[2J")
 }

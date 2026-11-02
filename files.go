@@ -6,14 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"time"
 )
-
-var extensions = map[string]bool{
-	".mp4": true, ".mov": true, ".nef": true,
-	".jpg": true, ".png": true, ".mp3": true,
-}
 
 func runTask(paths []string) {
 	start := time.Now()
@@ -28,23 +22,18 @@ func runTask(paths []string) {
 		if info.IsDir() {
 			filepath.WalkDir(p, func(path string, d fs.DirEntry, err error) error {
 				if err == nil && !d.IsDir() {
-					ext := filepath.Ext(path)
-					if extensions[strings.ToLower(ext)] {
-						allFiles = append(allFiles, path)
-					}
+					allFiles = append(allFiles, path)
 				}
 				return nil
 			})
 		} else {
-			if extensions[strings.ToLower(filepath.Ext(p))] {
-				allFiles = append(allFiles, p)
-			}
+			allFiles = append(allFiles, p)
 		}
 	}
 
 	total := len(allFiles)
 	if total == 0 {
-		fmt.Println("\033[31m[ 提示 ] 未发现匹配的媒体文件。\033[0m")
+		fmt.Println("\033[31m[ 提示 ] 未发现可处理的文件。\033[0m")
 		return
 	}
 
